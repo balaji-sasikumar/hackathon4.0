@@ -22,7 +22,8 @@ def run():
     """
     inputs = {
         'topic': 'AI LLMs',
-        'current_year': str(datetime.now().year)
+        'current_year': str(datetime.now().year),
+        'patient_details': 'Hi, I am Balaji age 25 with BP 120/80, sugar level 90 mg/dL, and I have a headache for the last 2 days. my email is balajisasi739030@gmail.com and i have diabetes'
     }
     
     try:

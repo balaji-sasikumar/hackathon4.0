@@ -1,17 +1,69 @@
-research_task:
+patient_intake_task:
   description: >
-    Conduct a thorough research about {topic}
-    Make sure you find any interesting and relevant information given
-    the current year is {current_year}.
+    Collect initial patient details such as name, age, email,BP, sugar level, symptoms, and history via voice or text. {patient_details}
+    Pre-fill Electronic Health Record (EHR) by sending the data to the relevant endpoint.
   expected_output: >
-    A list with 10 bullet points of the most relevant information about {topic}
-  agent: researcher
+    A JSON payload pushed to the EHR endpoint with all relevant patient metadata and symptoms.
+  agent: intake_agent
+# basic_diagnosis_task:
+#   description: >
+#     Analyze the provided symptoms and patient history to recommend initial remedies or next steps.
+#   expected_output: >
+#     Basic remedy suggestions in plain language along with a brief explanation.
+#   agent: bot_doctor_agent
 
-reporting_task:
-  description: >
-    Review the context you got and expand each topic into a full section for a report.
-    Make sure the report is detailed and contains any and all relevant information.
-  expected_output: >
-    A fully fledged report with the main topics, each with a full section of information.
-    Formatted as markdown without '```'
-  agent: reporting_analyst
+# appointment_booking_task:
+#   description: >
+#     Ask the patient if they want to book an appointment. If yes, schedule it via hospital/doctor calendar API.
+#   expected_output: >
+#     Confirmed appointment details including time, date, and doctor name.
+#   agent: appointment_agent
+
+# live_consultation_task:
+#   description: >
+#     Initiate a real-time chat or voice/video session between doctor and patient for live consultation.
+#   expected_output: >
+#     A link or interface to live session and confirmation that the call occurred.
+#   agent: live_support_agent
+
+# clinical_documentation_task:
+#   description: >
+#     Convert the live consultation conversation into structured clinical documentation.
+#   expected_output: >
+#     A structured report containing diagnosis, symptoms, and consultation summary.
+#   agent: documentation_agent
+
+# prescription_task:
+#   description: >
+#     Generate a prescription from the doctor's input and format it into a stylized HTML layout.
+#   expected_output: >
+#     A visually styled HTML prescription ready for emailing.
+#   agent: prescription_agent
+
+# email_prescription_task:
+#   description: >
+#     Email the generated prescription to the patient's registered email using a mailing API.
+#   expected_output: >
+#     Confirmation that the email was sent successfully with a copy of the email content.
+#   agent: email_agent
+
+# agent_learning_task:
+#   description: >
+#     Store the patient case, remedy, and doctor’s prescription for training future recommendations using reinforcement learning.
+#   expected_output: >
+#     Case saved and registered for model retraining pipeline.
+#   agent: rl_trainer_agent
+
+# payment_task:
+#   description: >
+#     Collect payment from the patient using an integrated payment gateway API after consultation or prescription delivery.
+#   expected_output: >
+#     Payment confirmation with transaction ID and invoice.
+#   agent: payment_agent
+
+# support_task:
+#   description: >
+#     Handle follow-up queries, complaints, or technical issues from the patient.
+#   expected_output: >
+#     Resolution of the patient's issue or escalation to human support.
+#   agent: support_agent
