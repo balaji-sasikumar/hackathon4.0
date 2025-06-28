@@ -38,28 +38,42 @@ patient_intake_task:
   agent: intake_agent
 basic_diagnosis_task:
   description: >
-    Analyze the provided symptoms and patient history to recommend initial remedies or next steps based on: {patient_details}.
-    After providing the remedy, ask the patient:
+    You are an AI healthcare assistant helping patients.
 
-    "Would you like to book an appointment with a doctor?"
-    Provide the options:
-      - "Yes, I want to consult now"
-      - "Yes, later is fine"
-      - "No, I'm fine with this"
+    Based on {patient_details}, perform the following:
 
-    Capture the user's choice using structured JSON as shown below:
-    {
-      "diagnosis": "...remedy here...",
-      "appointment_choice": "now" | "later" | "no"
-    }
+    1. If the message is a fresh intake with symptoms, analyze and provide a remedy.
 
-    Based on this choice:
-    - If "now", generate a random string of 10-12 characters (room ID) and respond with the live consultation link: `https://jitsistoragewebapp.z30.web.core.windows.net/#<room_id>`
-    - If "later", pass this decision and roomId to the next task for email follow-up.
-    - If "no", end the flow politely.
+       After the remedy, ask the patient:
+       - "Would you like to book an appointment with a doctor?"
+       - Provide options:
+         • "Yes, I want to consult now"
+         • "Yes, later is fine"
+         • "No, I'm fine with this"
+
+       Output:
+       {
+         "diagnosis": "...",
+         "appointment_choice": null
+       }
+
+    2. If the message is a reply like "Yes, I want to consult now", assume diagnosis was already given. In this case:
+
+       - Generate a `roomId` using the `generate_live_consultation_link` tool.
+       - Respond appropriately:
+         • "now" → return the link
+         • "later" → indicate it will be sent by email
+         • "no" → close the conversation politely
+
+       Output:
+       {
+         "diagnosis": "...",  # should be recalled from memory or prior input if possible
+         "appointment_choice": "now" | "later" | "no",
+         "roomId": "..."  # only for now or later
+       }
 
   expected_output: >
-    A valid JSON object with keys: diagnosis, appointment_choice, and optional roomId
+    Strictly valid JSON with the diagnosis , appointment_choice and live_consultation_url without doctor name or time.
   agent: bot_doctor_agent
 appointment_booking_task:
   description: >

@@ -6,6 +6,8 @@ from datetime import datetime
 
 from healthcare.crew import Healthcare
 import chainlit as cl
+
+from healthcare.tools.custom_tool import ConversationLoggerTool
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
 # This main file is intended to be a way for you to run your
@@ -75,9 +77,8 @@ load_dotenv()
 
 @cl.on_chat_start
 async def on_chat_start():
-    await cl.Message(
-        content=f"Welcome to the Healthcare Crew! please provide the patient details in the input field below."
-    ).send()
+    ConversationLoggerTool.clear_log()
+    await cl.Message(content="🩺 Welcome to the Healthcare Assistant! Please enter patient details to begin.").send()
 
 @cl.on_message
 async def on_message(message):
@@ -86,13 +87,19 @@ async def on_message(message):
     """
     try: 
         if message.content:
+            context = ConversationLoggerTool.read_log()
+            new_msg = f"User: {message.content}"
+            full_input = context + "\n" + new_msg
+
+            # Write the full log so far (includes user + assistant)
+            ConversationLoggerTool._run(ConversationLoggerTool(), content=new_msg)
             inputs = {
-                'patient_details': message.content,
+                'patient_details': full_input,
                 'patient_api': 'https://d319-103-13-41-82.ngrok-free.app/patient/upsert',  # Example API endpoint for EHR
             }
             try:
-                # await cl.Message(content="Processing your request...").send()
                 result = Healthcare().crew().kickoff(inputs=inputs)
+                # ConversationLoggerTool()._run(content=f"AI: {result}")
                 await cl.Message(
                     content=f"Healthcare Crew executed successfully! Here are the results:\n{result}"
                 ).send()
