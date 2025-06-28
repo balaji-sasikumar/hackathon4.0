@@ -54,7 +54,7 @@ basic_diagnosis_task:
     }
 
     Based on this choice:
-    - If "now", generate a random string of 10-12 characters (room ID) and respond with the live consultation link: `https://live-consultation.com?roomId=<room_id>`
+    - If "now", generate a random string of 10-12 characters (room ID) and respond with the live consultation link: `https://jitsistoragewebapp.z30.web.core.windows.net/#<room_id>`
     - If "later", pass this decision and roomId to the next task for email follow-up.
     - If "no", end the flow politely.
 
