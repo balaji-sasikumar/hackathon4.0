@@ -23,7 +23,8 @@ load_dotenv()
 #     inputs = {
 #         'topic': 'AI LLMs',
 #         'current_year': str(datetime.now().year),
-#         'patient_details': 'Hi, I am Balaji age 25 with BP 120/80, sugar level 90 mg/dL, and I have a headache for the last 2 days. my email is balajisasi739030@gmail.com and i have diabetes'
+#         'patient_details': 'Hi, I am Balaji age 25 with BP 120/80, sugar level 90 mg/dL, and I have a headache for the last 2 days. my email is balajisasi739030@gmail.com and i have diabetes',
+#         'patient_api': 'https://505b-103-13-41-82.ngrok-free.app/patient/upsert',
 #     }
     
 #     try:
@@ -83,15 +84,19 @@ async def on_message(message):
     """
     Handle incoming messages and trigger the crew execution.
     """
-    if message.content:
-        inputs = {
-            'patient_details': message.content
-        }
-        try:
-            # await cl.Message(content="Processing your request...").send()
-            result = Healthcare().crew().kickoff(inputs=inputs)
-            await cl.Message(
-                content=f"Healthcare Crew executed successfully! Here are the results:\n{result}"
-            ).send()
-        except Exception as e:
-            await cl.Message(content=f"An error occurred: {e}").send()
+    try: 
+        if message.content:
+            inputs = {
+                'patient_details': message.content,
+                'patient_api': 'https://d319-103-13-41-82.ngrok-free.app/patient/upsert',  # Example API endpoint for EHR
+            }
+            try:
+                # await cl.Message(content="Processing your request...").send()
+                result = Healthcare().crew().kickoff(inputs=inputs)
+                await cl.Message(
+                    content=f"Healthcare Crew executed successfully! Here are the results:\n{result}"
+                ).send()
+            except Exception as e:
+                await cl.Message(content=f"An error occurred: {e}").send()
+    except Exception as e:
+        await cl.Message(content=f"An error occurred while processing your request: {e}").send()
