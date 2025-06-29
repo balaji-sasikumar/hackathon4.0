@@ -46,7 +46,7 @@ basic_diagnosis_task:
     3. If chronic conditions are involved, add a note of caution.
     4. End by asking the user if they would like to consult a doctor.
 
-    Use this prompt after providing the diagnosis and remedies:
+    Use this prompt
     "Would you like to book an appointment with a doctor?"
     Provide options:
       • Yes, I want to consult now
@@ -67,7 +67,8 @@ appointment_booking_task:
 
     1. If the patient said: **"Yes, I want to consult now"**:
        - Use the `generate_live_consultation_link` tool.
-       - Return only the consultation URL.
+       - Only return the consultation link in the final answer if the user chose to consult now. Do not email it
+       - Set a flag `needs_email: false` in your output
 
     2. If the patient said: **"Yes, later is fine"**:
        - Call the `check_availability` tool with:
@@ -91,109 +92,46 @@ appointment_booking_task:
              "time": "selected_time"
            }
          }
-        From the {patient_details} context, extract:
-        - `email` of the patient
-        - previously generated live consultation URL (e.g., from earlier tasks)
-
-        Your goal:
-        - Compose a polite HTML email message that includes the consultation link.
-        - Wrap it in the following payload and call the `send_email` tool:
-
-          {
-              "email_api": "{email_api}",
-              "email_data":{
-                  "email": "<patient_email>",
-                  "html_content": "<html>Your consultation link: <a href='https://...'>Join Here</a></html>"
-              }
-          }
-
-        ⚠️ Notes:
-        - Ensure the link is clearly clickable in the email body.
-        - Keep the tone supportive and professional.
-        - Do not include unrelated content or raw logs.
        - Return a confirmation message with the booked time and notify them that they will receive a email.
+       - Set a flag `needs_email: true` in your output
 
     3. If the patient said: **"No, I'm fine with this"**:
        - End the conversation politely without scheduling.
+       - Set a flag `needs_email: false` in your output
 
   expected_output: >
     - If "now": live consultation link.
     - If "later": list slots and confirm booking.
     - If "no": simple, polite closure message.
   agent: appointment_agent
-# email_followup_task:
-#   description: >
-#     You are responsible for sending follow-up consultation links to patients who opted for "consult later".
 
-#     From the {patient_details} context, extract:
-#     - `email` of the patient
-#     - previously generated live consultation URL (e.g., from earlier tasks)
+email_followup_task:
+  description: >
+    You are responsible for sending follow-up consultation links to patients who opted for "consult later".
 
-#     Your goal:
-#     - Compose a polite HTML email message that includes the consultation link.
-#     - Wrap it in the following payload and call the `send_email` tool:
+    This task is conditionally executed by the Project Manager agent.
 
-#       {
-#            "email_api": "{email_api}",
-#            "email_data":{
-#               "email": "<patient_email>",
-#               "html_content": "<html>Your consultation link: <a href='https://...'>Join Here</a></html>"
-#           }
-#       }
+    From the {patient_details} context and the output of the appointment task:
+    - Extract `email` of the patient
+    - Use the `generate_live_consultation_link` tool to create a consultation link for the booked time.
 
-#     ⚠️ Notes:
-#     - Ensure the link is clearly clickable in the email body.
-#     - Keep the tone supportive and professional.
-#     - Do not include unrelated content or raw logs.
 
-#   expected_output: >
-#     A success confirmation message from the `send_email` tool.
-#   agent: email_agent
-#   context: [appointment_booking_task]
-# email_prescription_task:
-#   description: >
-#     Email the generated prescription or reports to the patient's registered email using a mailing API.
-#   expected_output: >
-#     Confirmation that the email was sent successfully with a copy of the email content.
-#   agent: email_agent
-# live_consultation_task:
-#   description: >
-#     Initiate a real-time chat or voice/video session between doctor and patient for live consultation.
-#   expected_output: >
-#     A link or interface to live session and confirmation that the call occurred.
-#   agent: live_support_agent
+    Your goal:
+    - Compose a polite HTML email message that includes the generated consultation link.
+    - Wrap it in this payload and use the `send_email` tool:
 
-# clinical_documentation_task:
-#   description: >
-#     Convert the live consultation conversation into structured clinical documentation.
-#   expected_output: >
-#     A structured report containing diagnosis, symptoms, and consultation summary.
-#   agent: documentation_agent
+      {
+           "email_api": "{email_api}",
+           "email_data":{
+              "email": "<patient_email>",
+              "html_content": "<html>Your consultation link: <a href=<consultation link>>Join Here</a></html>"
+          }
+      }
 
-# prescription_task:
-#   description: >
-#     Generate a prescription from the doctor's input and format it into a stylized HTML layout.
-#   expected_output: >
-#     A visually styled HTML prescription ready for emailing.
-#   agent: prescription_agent
+    ⚠️ Notes:
+    - Ensure the link is clearly clickable in the email body.
+    - Maintain a professional tone.
 
-# agent_learning_task:
-#   description: >
-#     Store the patient case, remedy, and doctor’s prescription for training future recommendations using reinforcement learning.
-#   expected_output: >
-#     Case saved and registered for model retraining pipeline.
-#   agent: rl_trainer_agent
-
-# payment_task:
-#   description: >
-#     Collect payment from the patient using an integrated payment gateway API after consultation or prescription delivery.
-#   expected_output: >
-#     Payment confirmation with transaction ID and invoice.
-#   agent: payment_agent
-
-# support_task:
-#   description: >
-#     Handle follow-up queries, complaints, or technical issues from the patient.
-#   expected_output: >
-#     Resolution of the patient's issue or escalation to human support.
-#   agent: support_agent
+  expected_output: >
+    success confirmation from `send_email`.
+  agent: email_agent

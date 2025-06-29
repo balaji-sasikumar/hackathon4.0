@@ -1,18 +1,34 @@
 User: Hi, I am Balaji age 25 with BP 120/80, sugar level 90 mg/dL, and I have a headache for the last 2 days. my email is balajisasi739030@gmail.com and i have diabetes
-AI: Would you like to book an appointment with a doctor?  
-  • Yes, I want to consult now  
-  • Yes, later is fine  
-  • No, I'm fine with this
-User: yes later
-AI: The following time slots are available for your consultation on 2025-06-29:
+AI Health Advisor: Thank you for sharing your details, Balaji! Based on the information, your blood pressure of 120/80 and sugar level of 90 mg/dL are within normal ranges, which is reassuring. However, your headache persisting for the last two days warrants attention, especially since you mentioned being diabetic. Chronic conditions like diabetes can sometimes contribute to symptoms like headaches due to factors like fluctuating blood sugar levels, dehydration, or even stress.
 
-- 09:00
-- 10:00
-- 11:00
-- 13:00
-- 14:00
-- 15:00
+### General Remedies to Try:
+1. **Hydration**: Drink plenty of water to ensure you're hydrated; dehydration can cause headaches.
+2. **Rest**: Ensure you're getting enough sleep and rest, as lack of sleep may worsen headaches.
+3. **Basic Pain Relief**: Over-the-counter medications like paracetamol (acetaminophen) or ibuprofen can help with headache relief. Be cautious with NSAIDs, especially with diabetes; consult a healthcare professional if unsure.
+4. **Check Sugar Levels**: Monitor your blood sugar levels if the headache persists, as extreme fluctuations could be a contributing factor.
 
-Please let me know your preferred time slot, and I will book the appointment for you!
-User: 15
-AI: Your appointment has been successfully booked for 15:00 on 2025-06-29. You will receive an email confirmation shortly with details. Please feel free to reach out if you have any further needs or questions. Thank you!
+### Note of Caution:
+Since you have diabetes, consistent or worsening headaches could be a sign of an underlying issue, such as high blood sugar, low blood sugar, or even tension/stress-induced headaches. If these remedies don't help or if symptoms worsen (e.g., nausea, blurred vision, or dizziness), professional evaluation is strongly recommended.
+
+Would you like to book an appointment with a doctor?  
+• Yes, I want to consult now  
+• Yes, later is fine  
+• No, I'm fine with this
+User: yes later if possible 11
+AI Health Advisor: The available time slots with Doctor ID "doc123" on 2025-06-29 are as follows:
+
+• 09:00 AM  
+• 10:00 AM  
+• 11:00 AM  
+• 01:00 PM  
+• 02:00 PM  
+• 03:00 PM  
+
+Please let me know your preferred time for the appointment, and I will book it for you!
+User: 11
+AI Health Advisor: Your appointment with Doctor "doc123" has been successfully booked for **11:00 AM** on **2025-06-29**. A confirmation email will be sent to **balajisasi739030@gmail.com**.
+
+Flag: `needs_email: true`
+
+Thank you for choosing our service! If you have any further questions or need assistance, feel free to reach out.
+AI (Follow-up): ✅ Email successfully sent to Balaji at "balajisasi739030@gmail.com" with the consultation link: https://jitsistoragewebapp.z30.web.core.windows.net/#uilrq8wH0Nt5. Email content is confirmed to meet professional standards and clickable link criteria.
