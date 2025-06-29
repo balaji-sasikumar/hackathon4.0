@@ -38,49 +38,118 @@ patient_intake_task:
   agent: intake_agent
 basic_diagnosis_task:
   description: >
-    You are an AI healthcare assistant helping patients.
+    You are an AI healthcare assistant providing basic diagnosis guidance.
 
-    Based on {patient_details}, perform the following:
+    Based on {patient_details}, do the following:
+    1. Assess the symptoms and health context
+    2. Suggest general remedies
+    3. If chronic conditions are involved, add a note of caution.
+    4. End by asking the user if they would like to consult a doctor.
 
-    1. If the message is a fresh intake with symptoms, analyze and provide a remedy.
+    Use this prompt after providing the diagnosis and remedies:
+    "Would you like to book an appointment with a doctor?"
+    Provide options:
+      • Yes, I want to consult now
+      • Yes, later is fine
+      • No, I'm fine with this
 
-       After the remedy, ask the patient:
-       - "Would you like to book an appointment with a doctor?"
-       - Provide options:
-         • "Yes, I want to consult now"
-         • "Yes, later is fine"
-         • "No, I'm fine with this"
-
-       Output:
-       {
-         "diagnosis": "...",
-         "appointment_choice": null
-       }
-
-    2. If the message is a reply like "Yes, I want to consult now", assume diagnosis was already given. In this case:
-
-       - Generate a `roomId` using the `generate_live_consultation_link` tool.
-       - Respond appropriately:
-         • "now" → return the link
-         • "later" → indicate it will be sent by email
-         • "no" → close the conversation politely
-
-       Output:
-       {
-         "diagnosis": "...",  # should be recalled from memory or prior input if possible
-         "appointment_choice": "now" | "later" | "no",
-         "roomId": "..."  # only for now or later
-       }
+    🚫 Do not handle scheduling or generate URLs. Only return advice and prompt.
 
   expected_output: >
-    Strictly valid JSON with the diagnosis , appointment_choice and live_consultation_url without doctor name or time.
+    A brief diagnosis and remedy with the consultation prompt and the three options.
   agent: bot_doctor_agent
+
 appointment_booking_task:
   description: >
-    Ask the patient if they want to book an appointment. If yes, schedule it via hospital/doctor calendar API.
+    You manage appointment scheduling based on user responses in the full conversation in {patient_details}.
+
+    Behavior:
+
+    1. If the patient said: **"Yes, I want to consult now"**:
+       - Use the `generate_live_consultation_link` tool.
+       - Return only the consultation URL.
+
+    2. If the patient said: **"Yes, later is fine"**:
+       - Call the `check_availability` tool with:
+         {
+           "availability_api": "{availability_api}",
+           "doctor_and_date": {
+             "doctorid": "doc123",
+             "date": "2025-06-29"
+           }
+         }
+
+       - From the result, filter time slots that are after the current time.
+       - Display those slots to the user for selection.
+
+       - Once the user selects a time, book the slot with the `book_appointment` tool using:
+         {
+           "appointment_api": "{appointment_api}",
+           "appointment": {
+             "doctorid": "doc123",
+             "patientid": "pat456",
+             "time": "selected_time"
+           }
+         }
+        From the {patient_details} context, extract:
+        - `email` of the patient
+        - previously generated live consultation URL (e.g., from earlier tasks)
+
+        Your goal:
+        - Compose a polite HTML email message that includes the consultation link.
+        - Wrap it in the following payload and call the `send_email` tool:
+
+          {
+              "email_api": "{email_api}",
+              "email_data":{
+                  "email": "<patient_email>",
+                  "html_content": "<html>Your consultation link: <a href='https://...'>Join Here</a></html>"
+              }
+          }
+
+        ⚠️ Notes:
+        - Ensure the link is clearly clickable in the email body.
+        - Keep the tone supportive and professional.
+        - Do not include unrelated content or raw logs.
+       - Return a confirmation message with the booked time and notify them that they will receive a email.
+
+    3. If the patient said: **"No, I'm fine with this"**:
+       - End the conversation politely without scheduling.
+
   expected_output: >
-    Confirmed appointment details including time, date, and doctor name.
+    - If "now": live consultation link.
+    - If "later": list slots and confirm booking.
+    - If "no": simple, polite closure message.
   agent: appointment_agent
+# email_followup_task:
+#   description: >
+#     You are responsible for sending follow-up consultation links to patients who opted for "consult later".
+
+#     From the {patient_details} context, extract:
+#     - `email` of the patient
+#     - previously generated live consultation URL (e.g., from earlier tasks)
+
+#     Your goal:
+#     - Compose a polite HTML email message that includes the consultation link.
+#     - Wrap it in the following payload and call the `send_email` tool:
+
+#       {
+#            "email_api": "{email_api}",
+#            "email_data":{
+#               "email": "<patient_email>",
+#               "html_content": "<html>Your consultation link: <a href='https://...'>Join Here</a></html>"
+#           }
+#       }
+
+#     ⚠️ Notes:
+#     - Ensure the link is clearly clickable in the email body.
+#     - Keep the tone supportive and professional.
+#     - Do not include unrelated content or raw logs.
+
+#   expected_output: >
+#     A success confirmation message from the `send_email` tool.
+#   agent: email_agent
+#   context: [appointment_booking_task]
 # email_prescription_task:
 #   description: >
 #     Email the generated prescription or reports to the patient's registered email using a mailing API.

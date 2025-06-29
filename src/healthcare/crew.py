@@ -3,7 +3,7 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 
-from healthcare.tools.custom_tool import ConversationLoggerTool, GenerateRoomLinkTool, PatientAPIPostTool
+from healthcare.tools.custom_tool import BookAppointmentTool, CheckAvailabilityTool, ConversationLoggerTool, EmailTool, GenerateRoomLinkTool, PatientAPIPostTool
 @CrewBase
 class Healthcare():
     """Healthcare crew"""
@@ -26,14 +26,22 @@ class Healthcare():
         return Agent(
             config=self.agents_config['bot_doctor_agent'], # type: ignore[index]
             verbose=True,
-            tools=[GenerateRoomLinkTool()],
+            
         )
     @agent
     def appointment_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['appointment_agent'], # type: ignore[index]
-            verbose=True
+            verbose=True,
+            tools=[GenerateRoomLinkTool(),CheckAvailabilityTool(), BookAppointmentTool()],
         )
+    # @agent
+    # def email_agent(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config['email_agent'], # type: ignore[index]
+    #         verbose=True,
+    #         tools=[EmailTool()],
+    #     )
     
     @task
     def patient_intake_task(self) -> Task:
@@ -52,21 +60,21 @@ class Healthcare():
         return Task(
             config=self.tasks_config['appointment_booking_task'], # type: ignore[index]
         )
+    # @task
+    # def email_followup_task(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config['email_followup_task'], # type: ignore[index]
+    #     )
 
     @crew
     def crew(self) -> Crew:
         """Creates the Healthcare crew"""
         
-        history = ConversationLoggerTool.read_log()
+        
         return Crew(
             agents=self.agents, # Automatically created by the @agent decorator
             tasks=self.tasks, # Automatically created by the @task decorator
             process=Process.sequential,
-            verbose=True,
-            tools=[
-                PatientAPIPostTool(),
-                GenerateRoomLinkTool(),
-                ConversationLoggerTool()
-            ]
+            verbose=True, # ⬅️ Return intermediate steps for debugging
             # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
         )

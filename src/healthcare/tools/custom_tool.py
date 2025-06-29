@@ -103,3 +103,23 @@ class BookAppointmentTool(BaseTool):
             return f"✅ Appointment booking responded with {response.status_code}: {response.text}"
         except Exception as e:
             return f"❌ Error booking appointment: {e}"
+
+
+class EmailAPIPayload(BaseModel):
+    email_api: str = Field(..., description="The API endpoint to send the email")
+    email_data: Dict[str, Any] = Field(..., description="The email data to send, in structured JSON format")
+
+class EmailTool(BaseTool):
+    name: str = "send_email"
+    description: str = "Sends an email notification."
+    args_schema: Type[EmailAPIPayload] = EmailAPIPayload  # ✅ Add proper type annotation
+
+    def _run(self, email_api: str, email_data: Dict[str, Any]) -> str:
+        import requests
+        try:
+            print(f"📧 Sending email to: {email_api}")
+            print(f"✉️ Email data: {email_data}")
+            response = requests.post(email_api, json=email_data)
+            return f"✅ Email sent with status {response.status_code}: {response.text}"
+        except Exception as e:
+            return f"❌ Error sending email: {e}"

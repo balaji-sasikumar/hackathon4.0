@@ -95,11 +95,14 @@ async def on_message(message):
             ConversationLoggerTool._run(ConversationLoggerTool(), content=new_msg)
             inputs = {
                 'patient_details': full_input,
-                'patient_api': 'https://d319-103-13-41-82.ngrok-free.app/patient/upsert',  # Example API endpoint for EHR
+                'patient_api': 'http://localhost:8080/patient/upsert', 
+                'appointment_api':'http://localhost:8080/book-appointment',
+                'availability_api': 'http://localhost:8080/check-availability',
+                'email_api': 'http://localhost:8080/send-email',
             }
             try:
                 result = Healthcare().crew().kickoff(inputs=inputs)
-                # ConversationLoggerTool()._run(content=f"AI: {result}")
+                ConversationLoggerTool()._run(content=f"AI: {result}")
                 await cl.Message(
                     content=f"Healthcare Crew executed successfully! Here are the results:\n{result}"
                 ).send()
