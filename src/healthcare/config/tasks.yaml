@@ -67,6 +67,7 @@ appointment_booking_task:
 
     1. If the patient said: **"Yes, I want to consult now"**:
        - Use the `generate_live_consultation_link` tool.
+       - The link should include the patient's email as a query parameter: `?patient=<patient_email>`
        - Only return the consultation link in the final answer if the user chose to consult now. Do not email it
        - Set a flag `needs_email: false` in your output
 
@@ -76,7 +77,7 @@ appointment_booking_task:
            "availability_api": "{availability_api}",
            "doctor_and_date": {
              "doctorid": "doc123",
-             "date": "2025-06-29"
+             "date": "2025-06-30"
            }
          }
 
@@ -114,6 +115,7 @@ email_followup_task:
     From the {patient_details} context and the output of the appointment task:
     - Extract `email` of the patient
     - Use the `generate_live_consultation_link` tool to create a consultation link for the booked time.
+    - The link should include the patient's email as a query parameter: `?patient=<patient_email>`
 
 
     Your goal:

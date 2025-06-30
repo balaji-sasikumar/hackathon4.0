@@ -1,34 +1,36 @@
 User: Hi, I am Balaji age 25 with BP 120/80, sugar level 90 mg/dL, and I have a headache for the last 2 days. my email is balajisasi739030@gmail.com and i have diabetes
-AI Health Advisor: Thank you for sharing your details, Balaji! Based on the information, your blood pressure of 120/80 and sugar level of 90 mg/dL are within normal ranges, which is reassuring. However, your headache persisting for the last two days warrants attention, especially since you mentioned being diabetic. Chronic conditions like diabetes can sometimes contribute to symptoms like headaches due to factors like fluctuating blood sugar levels, dehydration, or even stress.
+AI Health Advisor: Hi Balaji, based on the information you've shared:  
 
-### General Remedies to Try:
-1. **Hydration**: Drink plenty of water to ensure you're hydrated; dehydration can cause headaches.
-2. **Rest**: Ensure you're getting enough sleep and rest, as lack of sleep may worsen headaches.
-3. **Basic Pain Relief**: Over-the-counter medications like paracetamol (acetaminophen) or ibuprofen can help with headache relief. Be cautious with NSAIDs, especially with diabetes; consult a healthcare professional if unsure.
-4. **Check Sugar Levels**: Monitor your blood sugar levels if the headache persists, as extreme fluctuations could be a contributing factor.
+Your blood pressure (120/80) and sugar level (90 mg/dL) are within a normal range, which is positive. However, considering you have diabetes and have had a persistent headache for the last 2 days, here are a few thoughts:  
 
-### Note of Caution:
-Since you have diabetes, consistent or worsening headaches could be a sign of an underlying issue, such as high blood sugar, low blood sugar, or even tension/stress-induced headaches. If these remedies don't help or if symptoms worsen (e.g., nausea, blurred vision, or dizziness), professional evaluation is strongly recommended.
+1. **Assessment:** Persistent headaches can be caused by various factors, ranging from dehydration, stress, or tension to blood sugar fluctuations. Diabetes can sometimes contribute to vascular issues, which could cause headaches.
+   
+2. **General Remedies:**  
+   - Stay hydrated by drinking plenty of water throughout the day.  
+   - Apply a cold or warm compress to your forehead or neck for relief.  
+   - Take over-the-counter pain relief like paracetamol or ibuprofen (as long as it’s not contraindicated due to your health conditions).  
+   - Rest in a quiet, dark room to help reduce the headache intensity.  
+   - Monitor your blood sugar closely to rule out any sudden fluctuations.  
+
+3. **Note of caution:** Since you have diabetes, it’s critical to ensure this headache is not a sign of an underlying issue like hypertension, nerve problems, or low/high blood sugar episodes. Persistent headaches warrant professional evaluation.
 
 Would you like to book an appointment with a doctor?  
+Options:  
 • Yes, I want to consult now  
 • Yes, later is fine  
 • No, I'm fine with this
-User: yes later if possible 11
-AI Health Advisor: The available time slots with Doctor ID "doc123" on 2025-06-29 are as follows:
+User: yes later
+AI Health Advisor: The doctor is available on 2025-06-30 at the following times:  
+- 09:00  
+- 10:00  
+- 11:00  
+- 13:00  
+- 14:00  
+- 15:00  
 
-• 09:00 AM  
-• 10:00 AM  
-• 11:00 AM  
-• 01:00 PM  
-• 02:00 PM  
-• 03:00 PM  
-
-Please let me know your preferred time for the appointment, and I will book it for you!
-User: 11
-AI Health Advisor: Your appointment with Doctor "doc123" has been successfully booked for **11:00 AM** on **2025-06-29**. A confirmation email will be sent to **balajisasi739030@gmail.com**.
+Please select a time slot that works for you. Once you choose, I will confirm the appointment and notify you via email.
+User: 9
+AI Health Advisor: Your appointment has been successfully booked for 2025-06-30 at 09:00 with the doctor. You will receive an email confirmation with all the details.  
 
 Flag: `needs_email: true`
-
-Thank you for choosing our service! If you have any further questions or need assistance, feel free to reach out.
-AI (Follow-up): ✅ Email successfully sent to Balaji at "balajisasi739030@gmail.com" with the consultation link: https://jitsistoragewebapp.z30.web.core.windows.net/#uilrq8wH0Nt5. Email content is confirmed to meet professional standards and clickable link criteria.
+AI (Follow-up): ✅ Email successfully sent to balajisasi739030@gmail.com with the consultation link "https://jitsistoragewebapp.z30.web.core.windows.net/#0qUXJNRno6P?patient=balajisasi739030@gmail.com". 🎉
